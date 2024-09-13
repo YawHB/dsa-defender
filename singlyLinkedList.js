@@ -1,122 +1,134 @@
 export default class SinglyLinkedList {
-    constructor () {
-        this.head = null
+    constructor() {
+        this.head = null;
     }
-    
-    addInBeginning(data) {
-        const newNode = new Node(data, this.head);
-        
-        console.log(newNode)
-        //newNode.next = this.head
 
-        this.head = newNode
-        
+    addInBeginning(data) {
+        //Denne linje opretter en ny node. den indeholder data, samt en pointer som peger på det nuværende første node
+        const newNode = new Node(data, this.head);
+        //Denne linje siger at this.head (som blot er en reference) skal pege på noden newNode, i stedet for den "gamle" første node
+        this.head = newNode;
     }
 
     getFirstNode() {
-        return this.head
+        //Returnere node som this.head peger på, hvilket altid vil være den første
+        return this.head;
     }
 
     getLastNode() {
-        let node = this.next
-        while(node.next) {
-            node = this.head.next
+        //Hvis this.head peger på null, betyder det at listen er tom, da this.head altid peger på det første element
+        if (!this.head) {
+            console.log('the list is empty');
+            return null;
         }
-        console.log("Last node:", node);
-
+        //Vi sætter this.head til at pege på variablen "node"
+        let node = this.head;
+        //Hvis den nuværende node peger på en anden node, så sæt den næste node til at være den nuværende node.
+        //Det opdaterer både node variablen, og itererer gennem listen
+        while (node.next) {
+            node = node.next;
+        }
+        //Når while loopet er false, brder vi ud og returnerer node
         return node;
     }
 
     getNextNode(node) {
-        return node.next
+        return node.next;
     }
 
-    getNodeWith (data) {
-        let node = this.head
+    getNodeWithData(data) {
+        //Hvis this.head er false så er listen tom, og skal returnere null
+        if (!this.head) return null;
 
-        while(node.data != data && node.next) {
-            node = node.next
+        //Sætter node til at være den første node i listen
+        let node = this.head;
+        //Looper mens der stadig findes en node
+        while (node) {
+            //Ved et match mellem data returneres noden eller finder vi den næste node i rækken og looper igen.
+            if (node.data === data) {
+                console.log(`noden med data: ${data} er ${node}`);
+                return node;
+            } else {
+                node = node.next;
+            }
         }
-
-        console.log("Node with said data: ", node);
-
-        return node;
+        //findes der intet match i loopet, betyder det at noden slet ikke findes i listen
+        console.log(`noden med data: ${data} findes ikke`);
+        return null;
     }
-
     removeFirstNode() {
         if (this.head != null) {
-            this.head = this.head.next
+            this.head = this.head.next;
         } else {
-            console.log("No list exists")
+            console.log('No list exists');
         }
     }
 
     removeLastNode() {
-        let node = this.head
+        let node = this.head;
         if (!node) {
-            console.log("List is empty")
-            return 
+            console.log('List is empty');
+            return;
         }
         if (node.next) {
-        while(node.next.next) {
-            node = node.next
-        }
-        node.next = null
+            while (node.next.next) {
+                node = node.next;
+            }
+            node.next = null;
         } else {
-            this.head = null
+            this.head = null;
         }
-        console.log("Last node deleted");
+        console.log('Last node deleted');
     }
 
     removeNode(nodeToRemove) {
-        let node = this.head
+        let node = this.head;
         if (!node) {
-            console.log("List is empty")
-            return 
+            console.log('List is empty');
+            return;
         }
         if (this.head == nodeToRemove) {
-            this.head = this.head.next
-            console.log ("Deleted the head")
-            return 
+            this.head = this.head.next;
+            console.log('Deleted the head');
+            return;
         }
-        
-        while(node.next && node.next != nodeToRemove) {
-            node = node.next
+
+        while (node.next && node.next != nodeToRemove) {
+            node = node.next;
         }
-            if (node.next === nodeToRemove) {
-            node.next = node.next.next
-            } else {
-                console.log("Node doesn't exist")
-            }
-        console.log("Node deleted");
+        if (node.next === nodeToRemove) {
+            node.next = node.next.next;
+        } else {
+            console.log("Node doesn't exist");
+        }
+        console.log('Node deleted');
     }
 
-    remove (data) {
-        let node = this.getNodeWith(data)
-        this.removeNode(node)
+    remove(data) {
+        let node = this.getNodeWith(data);
+        this.removeNode(node);
     }
 
     dumpList() {
-        let node = this.head
-        
-        while(node) {
-            console.log("Node: ", node);
-            node = node.next
+        let node = this.head;
+
+        while (node) {
+            console.log('Node: ', node);
+            node = node.next;
         }
 
         return node;
     }
 
     size() {
-    let node = this.head;
-    let count = 0;
-    while (node){
-        count++
-        node = node.next;
+        let node = this.head;
+        let count = 0;
+        while (node) {
+            count++;
+            node = node.next;
         }
-    return count
+        return count;
     }
-    
 }
 
 class Node {
